@@ -4,7 +4,7 @@ require "activerecord_url_connections/version"
 
 Gem::Specification.new do |s|
   s.name        = "activerecord_url_connections"
-  s.version     = ActiverecordURLConnections::VERSION
+  s.version     = ActiveRecordURLConnections::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Glenn Gillen"]
   s.email       = ["glenn@rubypond.com"]

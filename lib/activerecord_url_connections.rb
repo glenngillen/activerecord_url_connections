@@ -1,4 +1,4 @@
-module ActiverecordURLConnections
+module ActiveRecordURLConnections
   def self.parse(str)
     config = URI.parse(str)
     { :encoding => "unicode",
