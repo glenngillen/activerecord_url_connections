@@ -13,6 +13,8 @@ module ActiveRecordURLConnections
     spec.reject!{ |key,value| value.nil? }
     spec.merge!(split_query_options(config.query))
     spec
+  rescue URI::InvalidURIError
+    return nil
   end
 
   private
@@ -27,11 +29,7 @@ ActiveRecord::Base.class_eval do
     alias_method :establish_connection_without_url, :establish_connection
     def establish_connection(spec = nil)
       spec ||= ENV["DATABASE_URL"]
-      if spec.is_a?(String) && url = URI.parse(spec)
-        spec = ActiveRecordURLConnections.parse(spec)
-      end
-      establish_connection_without_url(spec)
-    rescue URI::InvalidURIError
+      spec = ActiveRecordURLConnections.parse(spec) if spec.is_a?(String)
       establish_connection_without_url(spec)
     end
   end
