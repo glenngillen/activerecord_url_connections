@@ -1,5 +1,10 @@
 source "http://rubygems.org"
 
-gem "rake", "0.8.7"
+gem "rake"
 # Specify your gem's dependencies in activerecord_url_connections.gemspec
 gemspec
+
+group :test do
+  gem "ruby-debug19", :require => "ruby-debug"
+  gem "mocha", :require => nil
+end
