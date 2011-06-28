@@ -17,6 +17,7 @@ ActiveRecord::Base.class_eval do
   class << self
     alias_method :establish_connection_without_url, :establish_connection
     def establish_connection(spec = nil)
+      spec ||= ENV["DATABASE_URL"]
       if spec.is_a?(String) && url = URI.parse(spec)
         adapter = url.scheme
         adapter = "postgresql" if adapter == "postgres"

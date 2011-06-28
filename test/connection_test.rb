@@ -81,4 +81,13 @@ class TestConnection < Test::Unit::TestCase
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection(url)
   end
+
+  def test_use_environment_variable_if_no_spec_provided
+    url = "mysql://user:secret@localhost/mydatabase"
+    ENV["DATABASE_URL"] = url
+    connection_spec = mock_connection_spec(spec_hash, "mysql_connection")
+    ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
+      expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
+    ActiveRecord::Base.establish_connection
+  end
 end
