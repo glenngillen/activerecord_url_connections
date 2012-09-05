@@ -9,7 +9,7 @@ module ActiveRecordURLConnections
              :password => config.password,
              :port     => config.port,
              :database => config.path.sub(%r{^/},""),
-             :hostname => config.host }
+             :host => config.host }
     spec.reject!{ |key,value| value.nil? }
     spec.merge!(split_query_options(config.query))
     spec

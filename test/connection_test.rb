@@ -18,18 +18,18 @@ class TestConnection < Test::Unit::TestCase
   end
 
   def spec_hash(opts = {})
-    default_spec = { :adapter  => "mysql",
+    default_spec = { :adapter  => "postgresql",
                      :username => "user",
                      :password => "secret",
-                     :hostname => "localhost",
+                     :host => "localhost",
                      :database => "mydatabase" }
     default_spec.merge!(opts)
     default_spec
   end
 
   def test_generic_url_connection
-    connection_spec = mock_connection_spec(spec_hash, "mysql_connection")
-    url = "mysql://user:secret@localhost/mydatabase"
+    connection_spec = mock_connection_spec(spec_hash, "postgresql_connection")
+    url = "postgresql://user:secret@localhost/mydatabase"
     ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection(url)
@@ -37,7 +37,7 @@ class TestConnection < Test::Unit::TestCase
 
   def test_works_with_traditional_hash_spec
     spec = spec_hash
-    connection_spec = mock_connection_spec(spec, "mysql_connection")
+    connection_spec = mock_connection_spec(spec, "postgresql_connection")
     ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection(spec)
@@ -61,11 +61,11 @@ class TestConnection < Test::Unit::TestCase
 
   def test_supports_additional_options_as_params
     spec = spec_hash(:encoding => "utf8",
-                     :hostname => "remotehost.example.org",
+                     :host => "remotehost.example.org",
                      :port => 3133,
                      :random_key => "blah")
-    connection_spec = mock_connection_spec(spec, "mysql_connection")
-    url  = "mysql://user:secret@remotehost.example.org:3133/mydatabase?encoding=utf8&random_key=blah"
+    connection_spec = mock_connection_spec(spec, "postgresql_connection")
+    url  = "postgresql://user:secret@remotehost.example.org:3133/mydatabase?encoding=utf8&random_key=blah"
     ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection(url)
@@ -75,17 +75,17 @@ class TestConnection < Test::Unit::TestCase
     spec = spec_hash
     spec.delete(:username)
     spec.delete(:password)
-    connection_spec = mock_connection_spec(spec, "mysql_connection")
-    url  = "mysql://localhost/mydatabase"
+    connection_spec = mock_connection_spec(spec, "postgresql_connection")
+    url  = "postgresql://localhost/mydatabase"
     ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection(url)
   end
 
   def test_use_environment_variable_if_no_spec_provided
-    url = "mysql://user:secret@localhost/mydatabase"
+    url = "postgresql://user:secret@localhost/mydatabase"
     ENV["DATABASE_URL"] = url
-    connection_spec = mock_connection_spec(spec_hash, "mysql_connection")
+    connection_spec = mock_connection_spec(spec_hash, "postgresql_connection")
     ActiveRecord::ConnectionAdapters::ConnectionHandler.any_instance.
       expects(:establish_connection).with("ActiveRecord::Base", connection_spec)
     ActiveRecord::Base.establish_connection

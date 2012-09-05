@@ -6,5 +6,6 @@ gemspec
 
 group :test do
   gem "ruby-debug19", :require => "ruby-debug"
+  gem "pg"
   gem "mocha", :require => nil
 end
