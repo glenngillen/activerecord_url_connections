@@ -1,18 +1,22 @@
 require "active_record"
 module ActiveRecordURLConnections
   def self.parse(str)
-    config = URI.parse(str)
-    adapter = config.scheme
-    adapter = "postgresql" if adapter == "postgres"
-    spec = { :adapter  => adapter,
-             :username => config.user,
-             :password => config.password,
-             :port     => config.port,
-             :database => config.path.sub(%r{^/},""),
-             :host => config.host }
-    spec.reject!{ |key,value| value.nil? }
-    spec.merge!(split_query_options(config.query))
-    spec
+    if str =~ %r{//}
+      config = URI.parse(str)
+      adapter = config.scheme
+      adapter = "postgresql" if adapter == "postgres"
+      spec = { :adapter  => adapter,
+               :username => config.user,
+               :password => config.password,
+               :port     => config.port,
+               :database => config.path.sub(%r{^/},""),
+               :host => config.host }
+      spec.reject!{ |key,value| value.nil? }
+      spec.merge!(split_query_options(config.query))
+      spec
+    else
+      str
+    end
   rescue URI::InvalidURIError
     return nil
   end
